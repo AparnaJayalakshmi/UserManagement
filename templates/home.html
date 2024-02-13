@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+               
+            }
+    
+            h1 {
+                text-align: center;
+                color: #333;
+            }
+    
+            table {
+                background:white;
+                width: 100%;
+                border-collapse: collapse;
+            }
+    
+            th, td {
+                padding: 10px;
+                text-align: left;
+            }
+    
+            th {
+                background-color: #f2f2f2;
+            }
+    
+            tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+    
+            tr:hover {
+                background-color: #e0e0e0;
+            }
+    
+            button {
+                padding: 5px 10px;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                cursor: pointer;
+            }
+    
+            a {
+                text-decoration: none;
+                color: #3498db;
+            }
+    
+            a:hover {
+                color: #2980b9;
+            }
+    
+            span {
+                display: block;
+                margin-bottom: 10px;
+            }
+
+            .navbar {
+                overflow: hidden;
+                background-color: #333;
+            }
+    
+            .navbar a {
+                float: right;
+                display: block;
+                color: #f2f2f2;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+            }
+    
+            .navbar a:hover {
+                background-color: #ddd;
+                color: black;
+            }
+    
+            .navbar button {
+                float: right;
+                display: block;
+                background-color: #4CAF50;
+                color: white;
+                text-align: center;
+                padding: 14px 20px;
+                border: none;
+                cursor: pointer;
+            }
+    
+            .navbar button:hover {
+                background-color: #45a049;
+            }
+    
+            .navbar::after {
+                content: "";
+                clear: both;
+                display: table;
+            }
+        </style>
+
+        <h1>User Management</h1>
+        <hr></hr>
+        {% for message in messages %}
+        <p>{{message}}</p>
+        {% endfor %}
+    
+        <div class="navbar">
+            <span style="float: left; color: #f2f2f2; padding: 14px 16px;">Hello {{request.user}}</span>
+            <a href="{% url 'createuser' %}">AddUser</a>
+            
+            <a href="{% url 'logoutUser' %}">Logout</a>
+        </div>
+        
+        <table border="1">
+            
+            <tr>
+                <th>Slno</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+            
+            {% for user in users %}
+            {% with serial_number=forloop.counter %}
+            <tr>
+                <td>{{ serial_number }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                    <form action="{% url 'updateUser' user.id %}" method="GET">
+                        <button type="submit">Update</button>
+                    </form>
+                </td>
+                <td>
+                    <form action="{% url 'delete_user' user.id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+    
+            {% endwith %}
+            {% endfor %}
+            
+            
+        </table>
+        
+    </body>
+</html>
